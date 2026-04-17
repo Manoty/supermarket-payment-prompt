@@ -1,0 +1,11 @@
+# backend/.gitignore (root level)
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.log
+logs/
+staticfiles/
+.DS_Store
+db.sqlite3

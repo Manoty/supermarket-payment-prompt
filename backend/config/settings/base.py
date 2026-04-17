@@ -31,8 +31,19 @@ LOCAL_APPS = [
     'apps.payments',
 ]
 
-INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = [
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
 
+    # local apps
+    "apps.core",
+    "apps.users",
+    "apps.payments",
+]
 # --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -120,7 +131,7 @@ REST_FRAMEWORK = {
 }
 
 # --- Auth ---
-AUTH_USER_MODEL = 'users.User'
+
 
 # --- i18n ---
 LANGUAGE_CODE = 'en-us'

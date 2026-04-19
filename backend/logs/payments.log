@@ -1,0 +1,39 @@
+[ERROR] 2026-04-19 13:15:13,865 apps.payments views | Unexpected error in InitiatePaymentView: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
+Traceback (most recent call last):
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\views.py", line 46, in post
+    service = PaymentService()
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\services\payment_service.py", line 24, in __init__
+    self.mpesa = MpesaService()
+                 ~~~~~~~~~~~~^^
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\services\mpesa_service.py", line 32, in __init__
+    self.environment = settings.MPESA_ENVIRONMENT
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\kev\clean-shelf-mart\supermarket-payment\venv\Lib\site-packages\django\conf\__init__.py", line 77, in __getattr__
+    val = getattr(_wrapped, name)
+AttributeError: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
+[ERROR] 2026-04-19 13:15:49,133 apps.payments views | Unexpected error in InitiatePaymentView: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
+Traceback (most recent call last):
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\views.py", line 46, in post
+    service = PaymentService()
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\services\payment_service.py", line 24, in __init__
+    self.mpesa = MpesaService()
+                 ~~~~~~~~~~~~^^
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\services\mpesa_service.py", line 32, in __init__
+    self.environment = settings.MPESA_ENVIRONMENT
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\kev\clean-shelf-mart\supermarket-payment\venv\Lib\site-packages\django\conf\__init__.py", line 77, in __getattr__
+    val = getattr(_wrapped, name)
+AttributeError: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
+[ERROR] 2026-04-19 13:30:06,703 apps.payments views | Unexpected error in InitiatePaymentView: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
+Traceback (most recent call last):
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\views.py", line 46, in post
+    service = PaymentService()
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\services\payment_service.py", line 24, in __init__
+    self.mpesa = MpesaService()
+                 ~~~~~~~~~~~~^^
+  File "C:\kev\clean-shelf-mart\supermarket-payment\backend\apps\payments\services\mpesa_service.py", line 32, in __init__
+    self.environment = settings.MPESA_ENVIRONMENT
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\kev\clean-shelf-mart\supermarket-payment\venv\Lib\site-packages\django\conf\__init__.py", line 77, in __getattr__
+    val = getattr(_wrapped, name)
+AttributeError: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'

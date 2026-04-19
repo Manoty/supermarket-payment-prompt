@@ -8,11 +8,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = [
-    "127.0.0.1",
-    "localhost",
-    ".ngrok-free.app",
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default='localhost,127.0.0.1')
+
 # --- Apps ---
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -34,24 +31,13 @@ LOCAL_APPS = [
     'apps.payments',
 ]
 
-INSTALLED_APPS = [
-    "django.contrib.admin",
-    "django.contrib.auth",
-    "django.contrib.contenttypes",
-    "django.contrib.sessions",
-    "django.contrib.messages",
-    "django.contrib.staticfiles",
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
-    # local apps
-    "apps.core",
-    "apps.users",
-    "apps.payments",
-]
 # --- Middleware ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',        # Serve static files
-    'corsheaders.middleware.CorsMiddleware',             # CORS — must be high up
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -59,8 +45,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-MPESA_ENV = os.getenv("MPESA_ENV", "sandbox")
 
 ROOT_URLCONF = 'config.urls'
 
@@ -98,9 +82,12 @@ DATABASES = {
 }
 
 # --- Cache (Redis) ---
+# In config/settings/base.py
+# Replace the CACHES block with this:
+
 CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
 
@@ -110,9 +97,9 @@ CELERY_RESULT_BACKEND = config('REDIS_URL', default='redis://127.0.0.1:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Africa/Nairobi'       # Your timezone
+CELERY_TIMEZONE = 'Africa/Nairobi'
 CELERY_TASK_TRACK_STARTED = True
-CELERY_TASK_TIME_LIMIT = 30 * 60         # 30 minute hard limit per task
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 # --- DRF ---
 REST_FRAMEWORK = {
@@ -126,7 +113,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.AnonRateThrottle',
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '20/min',          # 20 requests/min per IP
+        'anon': '20/min',
     },
     'EXCEPTION_HANDLER': 'apps.core.exceptions.custom_exception_handler',
 }
@@ -148,16 +135,13 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --- M-Pesa ---
-MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
-MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
-MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
-MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
-MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
+MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY')
+MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET')
+MPESA_SHORTCODE = config('MPESA_SHORTCODE')
+MPESA_PASSKEY = config('MPESA_PASSKEY')
+MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL')
+MPESA_ENVIRONMENT = config('MPESA_ENVIRONMENT', default='sandbox')
 
-if MPESA_ENV == "sandbox":
-    MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"
-else:
-    MPESA_BASE_URL = "https://api.safaricom.co.ke"
 # --- Logging ---
 LOGGING = {
     'version': 1,
@@ -165,10 +149,6 @@ LOGGING = {
     'formatters': {
         'verbose': {
             'format': '[{levelname}] {asctime} {name} {module} | {message}',
-            'style': '{',
-        },
-        'simple': {
-            'format': '[{levelname}] {message}',
             'style': '{',
         },
     },
@@ -180,7 +160,7 @@ LOGGING = {
         'payment_file': {
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': BASE_DIR / 'logs' / 'payments.log',
-            'maxBytes': 1024 * 1024 * 10,  # 10MB per file
+            'maxBytes': 1024 * 1024 * 10,
             'backupCount': 5,
             'formatter': 'verbose',
         },
@@ -198,5 +178,4 @@ LOGGING = {
     },
 }
 
-# Create logs directory if it doesn't exist
 os.makedirs(BASE_DIR / 'logs', exist_ok=True)

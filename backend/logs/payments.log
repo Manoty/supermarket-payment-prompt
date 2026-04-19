@@ -43,3 +43,23 @@ AttributeError: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
 [INFO] 2026-04-19 13:51:10,530 apps.payments mpesa_service | Initiating STK Push | Phone: 254741753710 | Amount: KES 1 | Reference: CleanShelfMart
 [INFO] 2026-04-19 13:51:11,788 apps.payments mpesa_service | STK Push response | ResponseCode: 0 | CheckoutRequestID: ws_CO_19042026135111809741753710
 [INFO] 2026-04-19 13:51:11,812 apps.payments payment_service | STK Push initiated successfully | TxnID: 1760d918-d086-473a-90d9-ab6b5b0ddedb | CheckoutRequestID: ws_CO_19042026135111809741753710
+[WARNING] 2026-04-19 18:05:23,538 apps.payments payment_service | Duplicate payment blocked | Phone: 254741753710
+[INFO] 2026-04-19 18:07:43,300 apps.payments payment_repository | Transaction created | ID: 5e385379-6ddf-4f43-8d06-720650b2f1f2 | Phone: 254741753710 | Amount: KES 1.00
+[INFO] 2026-04-19 18:07:43,505 apps.payments payment_service | Payment queued | TxnID: 5e385379-6ddf-4f43-8d06-720650b2f1f2 | Phone: 254741753710 | Amount: KES 1.00
+[INFO] 2026-04-19 18:07:43,744 apps.payments tasks | Task: Initiating STK Push for TxnID: 5e385379-6ddf-4f43-8d06-720650b2f1f2
+[INFO] 2026-04-19 18:07:43,745 apps.payments mpesa_service | Fetching new M-Pesa access token from Daraja
+[INFO] 2026-04-19 18:07:44,934 apps.payments mpesa_service | M-Pesa access token fetched and cached successfully
+[INFO] 2026-04-19 18:07:48,614 apps.payments mpesa_service | Initiating STK Push | Phone: 254741753710 | Amount: KES 1 | Reference: CleanShelfMart
+[INFO] 2026-04-19 18:07:49,917 apps.payments mpesa_service | STK Push response | ResponseCode: 0 | CheckoutRequestID: ws_CO_19042026180749587741753710
+[INFO] 2026-04-19 18:07:49,927 apps.payments tasks | Task: STK Push sent | TxnID: 5e385379-6ddf-4f43-8d06-720650b2f1f2 | CheckoutRequestID: ws_CO_19042026180749587741753710
+[WARNING] 2026-04-19 18:09:50,038 apps.payments tasks | Timeout check: Transaction 5e385379-6ddf-4f43-8d06-720650b2f1f2 still PENDING after 2 minutes — marking as TIMEOUT
+[INFO] 2026-04-19 20:34:39,687 apps.payments payment_service | New user created | Phone: 254117107386
+[INFO] 2026-04-19 20:34:39,710 apps.payments payment_repository | Transaction created | ID: 7d9923d1-d0e2-486f-8ee8-61842fa368dd | Phone: 254117107386 | Amount: KES 1.00
+[INFO] 2026-04-19 20:34:40,352 apps.payments payment_service | Payment queued | TxnID: 7d9923d1-d0e2-486f-8ee8-61842fa368dd | Phone: 254117107386 | Amount: KES 1.00
+[INFO] 2026-04-19 20:34:40,726 apps.payments tasks | Task: Initiating STK Push for TxnID: 7d9923d1-d0e2-486f-8ee8-61842fa368dd
+[INFO] 2026-04-19 20:34:40,735 apps.payments mpesa_service | Fetching new M-Pesa access token from Daraja
+[INFO] 2026-04-19 20:34:42,001 apps.payments mpesa_service | M-Pesa access token fetched and cached successfully
+[INFO] 2026-04-19 20:34:42,008 apps.payments mpesa_service | Initiating STK Push | Phone: 254117107386 | Amount: KES 1 | Reference: CleanShelfMart
+[INFO] 2026-04-19 20:34:43,215 apps.payments mpesa_service | STK Push response | ResponseCode: 0 | CheckoutRequestID: ws_CO_19042026203442954117107386
+[INFO] 2026-04-19 20:34:43,225 apps.payments tasks | Task: STK Push sent | TxnID: 7d9923d1-d0e2-486f-8ee8-61842fa368dd | CheckoutRequestID: ws_CO_19042026203442954117107386
+[WARNING] 2026-04-19 20:36:43,401 apps.payments tasks | Timeout check: Transaction 7d9923d1-d0e2-486f-8ee8-61842fa368dd still PENDING after 2 minutes — marking as TIMEOUT

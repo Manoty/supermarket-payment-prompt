@@ -1,9 +1,10 @@
-# backend/apps/payments/views.py
+# backend/apps/payments/views.py — full final version
 
 import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.throttling import AnonRateThrottle
 
 from .serializers import InitiatePaymentSerializer
 from .services.payment_service import (
@@ -17,15 +18,13 @@ from .services.webhook_service import WebhookService
 logger = logging.getLogger('apps.payments')
 
 
-
+class PaymentRateThrottle(AnonRateThrottle):
+    """5 payment attempts per minute per IP."""
+    rate = '5/min'
 
 
 class InitiatePaymentView(APIView):
-    """
-    POST /api/payments/initiate/
-    Validates input, triggers STK Push, returns transaction ID.
-    """
-    
+    throttle_classes = [PaymentRateThrottle]
 
     def post(self, request):
         serializer = InitiatePaymentSerializer(data=request.data)
@@ -36,14 +35,11 @@ class InitiatePaymentView(APIView):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        phone_number = serializer.validated_data['phone_number']
-        amount = serializer.validated_data['amount']
-
         try:
             service = PaymentService()
             result = service.initiate_payment(
-                phone_number=phone_number,
-                amount=amount,
+                phone_number=serializer.validated_data['phone_number'],
+                amount=serializer.validated_data['amount'],
             )
             return Response(result, status=status.HTTP_201_CREATED)
 
@@ -68,10 +64,6 @@ class InitiatePaymentView(APIView):
 
 
 class PaymentStatusView(APIView):
-    """
-    GET /api/payments/status/<transaction_id>/
-    Frontend polls this every 3 seconds to check payment status.
-    """
 
     def get(self, request, transaction_id):
         try:
@@ -94,25 +86,13 @@ class PaymentStatusView(APIView):
 
 
 class MpesaCallbackView(APIView):
-    """
-    POST /api/payments/callback/
-    Receives STK Push result from Safaricom.
-
-    IMPORTANT:
-    - Must return HTTP 200 quickly — Safaricom will retry if we don't
-    - No authentication required (Safaricom doesn't send auth headers)
-    - We validate by matching CheckoutRequestID to our DB records
-    """
-    authentication_classes = []   # No auth — Safaricom can't authenticate
-    permission_classes = []       # Public endpoint
+    authentication_classes = []
+    permission_classes = []
 
     def post(self, request):
-        payload = request.data
-
         logger.info(f"M-Pesa callback received | IP: {request.META.get('REMOTE_ADDR')}")
 
-        if not payload:
-            logger.warning("Empty callback payload received")
+        if not request.data:
             return Response(
                 {'ResultCode': 0, 'ResultDesc': 'Accepted'},
                 status=status.HTTP_200_OK
@@ -120,14 +100,11 @@ class MpesaCallbackView(APIView):
 
         try:
             service = WebhookService()
-            service.process_stk_callback(payload)
-
+            service.process_stk_callback(request.data)
         except Exception as e:
-            # NEVER return non-200 to Safaricom or they will retry endlessly
-            # Log the error but always acknowledge receipt
             logger.exception(f"Error processing M-Pesa callback: {e}")
 
-        # Always return this exact format — Safaricom requires it
+        # Always return 200 to Safaricom
         return Response(
             {'ResultCode': 0, 'ResultDesc': 'Accepted'},
             status=status.HTTP_200_OK

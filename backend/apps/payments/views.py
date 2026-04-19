@@ -4,7 +4,6 @@ import logging
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.throttling import AnonRateThrottle
 
 from .serializers import InitiatePaymentSerializer
 from .services.payment_service import (
@@ -18,9 +17,7 @@ from .services.webhook_service import WebhookService
 logger = logging.getLogger('apps.payments')
 
 
-class PaymentRateThrottle(AnonRateThrottle):
-    """Stricter rate limit specifically for payment initiation: 5/min per IP."""
-    rate = '5/min'
+
 
 
 class InitiatePaymentView(APIView):
@@ -28,7 +25,7 @@ class InitiatePaymentView(APIView):
     POST /api/payments/initiate/
     Validates input, triggers STK Push, returns transaction ID.
     """
-    throttle_classes = [PaymentRateThrottle]
+    
 
     def post(self, request):
         serializer = InitiatePaymentSerializer(data=request.data)

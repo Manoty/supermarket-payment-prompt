@@ -8,8 +8,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    ".ngrok-free.app",
+]
 # --- Apps ---
 DJANGO_APPS = [
     'django.contrib.admin',
@@ -57,6 +60,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+MPESA_ENV = os.getenv("MPESA_ENV", "sandbox")
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -94,12 +99,8 @@ DATABASES = {
 
 # --- Cache (Redis) ---
 CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     }
 }
 
@@ -131,7 +132,7 @@ REST_FRAMEWORK = {
 }
 
 # --- Auth ---
-
+AUTH_USER_MODEL = 'users.User'
 
 # --- i18n ---
 LANGUAGE_CODE = 'en-us'
@@ -147,13 +148,16 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # --- M-Pesa ---
-MPESA_CONSUMER_KEY = config('MPESA_CONSUMER_KEY')
-MPESA_CONSUMER_SECRET = config('MPESA_CONSUMER_SECRET')
-MPESA_SHORTCODE = config('MPESA_SHORTCODE')
-MPESA_PASSKEY = config('MPESA_PASSKEY')
-MPESA_CALLBACK_URL = config('MPESA_CALLBACK_URL')
-MPESA_ENVIRONMENT = config('MPESA_ENVIRONMENT', default='sandbox')
+MPESA_CONSUMER_KEY = os.getenv("MPESA_CONSUMER_KEY")
+MPESA_CONSUMER_SECRET = os.getenv("MPESA_CONSUMER_SECRET")
+MPESA_SHORTCODE = os.getenv("MPESA_SHORTCODE")
+MPESA_PASSKEY = os.getenv("MPESA_PASSKEY")
+MPESA_CALLBACK_URL = os.getenv("MPESA_CALLBACK_URL")
 
+if MPESA_ENV == "sandbox":
+    MPESA_BASE_URL = "https://sandbox.safaricom.co.ke"
+else:
+    MPESA_BASE_URL = "https://api.safaricom.co.ke"
 # --- Logging ---
 LOGGING = {
     'version': 1,

@@ -37,3 +37,9 @@ Traceback (most recent call last):
   File "C:\kev\clean-shelf-mart\supermarket-payment\venv\Lib\site-packages\django\conf\__init__.py", line 77, in __getattr__
     val = getattr(_wrapped, name)
 AttributeError: 'Settings' object has no attribute 'MPESA_ENVIRONMENT'
+[INFO] 2026-04-19 13:51:05,968 apps.payments payment_repository | Transaction created | ID: 1760d918-d086-473a-90d9-ab6b5b0ddedb | Phone: 254741753710 | Amount: KES 1.00
+[INFO] 2026-04-19 13:51:05,970 apps.payments mpesa_service | Fetching new M-Pesa access token from Daraja
+[INFO] 2026-04-19 13:51:07,339 apps.payments mpesa_service | M-Pesa access token fetched and cached successfully
+[INFO] 2026-04-19 13:51:10,530 apps.payments mpesa_service | Initiating STK Push | Phone: 254741753710 | Amount: KES 1 | Reference: CleanShelfMart
+[INFO] 2026-04-19 13:51:11,788 apps.payments mpesa_service | STK Push response | ResponseCode: 0 | CheckoutRequestID: ws_CO_19042026135111809741753710
+[INFO] 2026-04-19 13:51:11,812 apps.payments payment_service | STK Push initiated successfully | TxnID: 1760d918-d086-473a-90d9-ab6b5b0ddedb | CheckoutRequestID: ws_CO_19042026135111809741753710
